@@ -1,5 +1,5 @@
 # CodePipeline Configuration
-resource "aws_codestarconnections_connection" "codepipeline_codestart_connection" {
+resource "aws_codestarconnections_connection" "codepipeline_codestar_connection" {
   name          = "codestar-connection"
   provider_type = "GitHub"
 }
@@ -26,8 +26,8 @@ resource "aws_codepipeline" "nodeapp_pipeline" {
       input_artifacts  = []
 
       configuration = {
-        ConnectionArn    = aws_codestarconnections_connection.codepipeline_codestart_connection.arn
-        FullRepositoryId = "mmdcloud/aws-ecr-ecs"
+        ConnectionArn    = aws_codestarconnections_connection.codepipeline_codestar_connection.arn
+        FullRepositoryId = "mmdcloud/carshub-rest-ecs"
         BranchName       = "master"
       }
     }
@@ -143,7 +143,7 @@ data "aws_iam_policy_document" "codepipeline_policy" {
   statement {
     effect    = "Allow"
     actions   = ["codestar-connections:UseConnection"]
-    resources = [aws_codestarconnections_connection.codepipeline_codestart_connection.arn]
+    resources = [aws_codestarconnections_connection.codepipeline_codestar_connection.arn]
   }
 
   statement {

@@ -122,7 +122,7 @@ resource "aws_codebuild_project" "nodeapp_build" {
 
   source {
     type            = "GITHUB"
-    location        = "https://github.com/mmdcloud/aws-ecr-ecs.git"
+    location        = "https://github.com/mmdcloud/carshub-rest-ecs.git"
     git_clone_depth = 1
 
     git_submodules_config {
