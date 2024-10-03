@@ -11,6 +11,6 @@ resource "aws_ecr_repository" "nodeapp" {
 # Bash script to build the docker image and push it to ECR
 resource "null_resource" "push_to_ecr" {
   provisioner "local-exec" {
-    command = "bash ${path.cwd}/../../backend/api/ecr-build-push.sh ${aws_ecr_repository.nodeapp.name} ${var.region}"
+    command = "bash ${path.cwd}/../../backend/api/ecr_build_push.sh ${aws_ecr_repository.nodeapp.name} ${var.region}"
   }
 }
