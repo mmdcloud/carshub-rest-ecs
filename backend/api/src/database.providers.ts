@@ -14,10 +14,10 @@ export const databaseProviders = [
         useFactory: async () => {
             const sequelize = new Sequelize({
                 dialect: 'mysql',
-                host: "carshub.cbggkusgag7n.us-east-1.rds.amazonaws.com",
+                host: "",
                 port: 3306,
-                username: 'admin',
-                password: 'Mohitdixit12345!',
+                username: "",
+                password: "",
                 database: 'carshub',
             });
             sequelize.addModels([
