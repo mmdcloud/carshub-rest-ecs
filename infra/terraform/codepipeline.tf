@@ -63,8 +63,8 @@ resource "aws_codepipeline" "nodeapp_pipeline" {
       version         = "1"
 
       configuration = {
-        ClusterName = aws_ecs_cluster.nodeapp-cluster.name
-        ServiceName = aws_ecs_service.nodeapp-service.name
+        ClusterName = aws_ecs_cluster.carshub-cluster.name
+        ServiceName = aws_ecs_service.carshub-service.name
         FileName    = "imagedefinitions.json"
       }
     }

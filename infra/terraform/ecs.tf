@@ -1,6 +1,6 @@
 # ECS Cluster
-resource "aws_ecs_cluster" "nodeapp-cluster" {
-  name = "nodeapp-cluster"
+resource "aws_ecs_cluster" "carshub-cluster" {
+  name = "carshub-cluster"
   setting {
     name  = "containerInsights"
     value = "disabled"
@@ -33,8 +33,8 @@ resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-policy-attach
 }
 
 # ECS Task Definition
-resource "aws_ecs_task_definition" "nodeapp-task-definition" {
-  family                   = "nodeapp-task-definition"
+resource "aws_ecs_task_definition" "carshub-task-definition" {
+  family                   = "carshub-task-definition"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 1024
   memory                   = 2048
@@ -48,26 +48,26 @@ resource "aws_ecs_task_definition" "nodeapp-task-definition" {
   container_definitions = jsonencode(
     [
       {
-        "name" : "nodeapp",
-        "image" : "${aws_ecr_repository.nodeapp.repository_url}:latest",
+        "name" : "carshub",
+        "image" : "${aws_ecr_repository.carshub.repository_url}:latest",
         "cpu" : 1024,
         "memory" : 2048,
         "essential" : true,
         "portMappings" : [
           {
-            "containerPort" : 80,
-            "hostPort" : 80,
-            "name" : "nodeapp-http-80",
+            "containerPort" : 8080,
+            "hostPort" : 8080,
+            "name" : "carshub-http-80",
             "appProtocol" : "http",
             "protocol" : "tcp"
           }
-        ]
+        ],
       }
   ])
   # container_definitions = jsonencode([
   #   {
   #     name      = "nodeapp"
-  #     image     = "${aws_ecr_repository.nodeapp.repository_url}:latest"
+  #     image     = "${aws_ecr_repository.carshub.repository_url}:latest"
   #     cpu       = 256
   #     memory    = 512
   #     essential = true
@@ -81,15 +81,15 @@ resource "aws_ecs_task_definition" "nodeapp-task-definition" {
   #   }
   # ])
   tags_all = {
-    Name = "nodeapp-task-definition"
+    Name = "carshub-task-definition"
   }
 }
 
 # ECS Service
-resource "aws_ecs_service" "nodeapp-service" {
-  name                 = "nodeapp-service"
-  cluster              = aws_ecs_cluster.nodeapp-cluster.id
-  task_definition      = aws_ecs_task_definition.nodeapp-task-definition.arn
+resource "aws_ecs_service" "carshub-service" {
+  name                 = "carshub-service"
+  cluster              = aws_ecs_cluster.carshub-cluster.id
+  task_definition      = aws_ecs_task_definition.carshub-task-definition.arn
   launch_type          = "FARGATE"
   scheduling_strategy  = "REPLICA"
   desired_count        = 1
@@ -103,8 +103,9 @@ resource "aws_ecs_service" "nodeapp-service" {
     type = "ECS"
   }
   load_balancer {
-    container_name   = "nodeapp"
-    container_port   = 80
+    container_name   = "carshub"
+    container_port   = 8080
     target_group_arn = aws_lb_target_group.lb_target_group.arn
   }
+  depends_on = [null_resource.push_to_ecr]
 }

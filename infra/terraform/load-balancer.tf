@@ -15,7 +15,7 @@ resource "aws_lb" "lb" {
 # Creating a Target Group
 resource "aws_lb_target_group" "lb_target_group" {
   name            = "lb-target-group"
-  port            = 80
+  port            = 8080
   ip_address_type = "ipv4"
   protocol        = "HTTP"
   target_type     = "ip"

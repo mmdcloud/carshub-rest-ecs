@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "codebuild_cache_bucket_policy_document" {
       "ecr:PutImage",
       "ecr:UploadLayerPart"
     ]
-    resources = [aws_ecr_repository.nodeapp.arn]
+    resources = [aws_ecr_repository.carshub.arn]
   }
 }
 

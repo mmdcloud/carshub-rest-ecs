@@ -1,6 +1,6 @@
 # ECR 
-resource "aws_ecr_repository" "nodeapp" {
-  name                 = "nodeapp"
+resource "aws_ecr_repository" "carshub" {
+  name                 = "carshub"
   image_tag_mutability = "MUTABLE"
   force_delete         = true
   image_scanning_configuration {
@@ -11,6 +11,6 @@ resource "aws_ecr_repository" "nodeapp" {
 # Bash script to build the docker image and push it to ECR
 resource "null_resource" "push_to_ecr" {
   provisioner "local-exec" {
-    command = "bash ${path.cwd}/../../backend/api/ecr_build_push.sh ${aws_ecr_repository.nodeapp.name} ${var.region}"
+    command = "bash ${path.cwd}/../../backend/api/ecr_build_push.sh ${aws_ecr_repository.carshub.name} ${var.region} ${tostring(data.vault_generic_secret.rds.data["username"])} ${tostring(data.vault_generic_secret.rds.data["password"])} ${tostring(split(":", aws_db_instance.carshub-db.endpoint)[0])}"
   }
 }
