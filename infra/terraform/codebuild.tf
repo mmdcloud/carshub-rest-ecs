@@ -1,6 +1,6 @@
 # CodeBuild Configuration
-resource "aws_s3_bucket" "codebuild_cache_bucket" {
-  bucket        = "theplayer007-codebuild-cache-bucket"
+resource "aws_s3_bucket" "carshub_codebuild_cache_bucket" {
+  bucket        = "theplayer007-carshub-codebuild-cache-bucket"
   force_destroy = true
 }
 
@@ -17,8 +17,8 @@ data "aws_iam_policy_document" "codebuild_assume_role" {
   }
 }
 
-resource "aws_iam_role" "codebuild_iam_role" {
-  name               = "codebuild-iam-role"
+resource "aws_iam_role" "carshub_codebuild_iam_role" {
+  name               = "carshub-codebuild-iam-role"
   assume_role_policy = data.aws_iam_policy_document.codebuild_assume_role.json
 }
 
@@ -65,16 +65,16 @@ data "aws_iam_policy_document" "codebuild_cache_bucket_policy_document" {
   }
 }
 
-resource "aws_iam_role_policy" "codebuild_cache_bucket_policy" {
-  role   = aws_iam_role.codebuild_iam_role.name
+resource "aws_iam_role_policy" "carshub_codebuild_cache_bucket_policy" {
+  role   = aws_iam_role.carshub_codebuild_iam_role.name
   policy = data.aws_iam_policy_document.codebuild_cache_bucket_policy_document.json
 }
 
-resource "aws_codebuild_project" "nodeapp_build" {
-  name          = "nodeapp-build"
-  description   = "nodeapp-build"
+resource "aws_codebuild_project" "carshub_build" {
+  name          = "carshub-build"
+  description   = "carshub-build"
   build_timeout = 60
-  service_role  = aws_iam_role.codebuild_iam_role.arn
+  service_role  = aws_iam_role.carshub_codebuild_iam_role.arn
 
   artifacts {
     type = "NO_ARTIFACTS"
@@ -82,7 +82,7 @@ resource "aws_codebuild_project" "nodeapp_build" {
 
   cache {
     type     = "S3"
-    location = aws_s3_bucket.codebuild_cache_bucket.bucket
+    location = aws_s3_bucket.carshub_codebuild_cache_bucket.bucket
   }
 
   environment {
@@ -104,19 +104,19 @@ resource "aws_codebuild_project" "nodeapp_build" {
 
     environment_variable {
       name  = "REPO"
-      value = "nodeapp"
+      value = "carshub"
     }
   }
 
   logs_config {
     cloudwatch_logs {
-      group_name  = "nodeapp-log-group"
-      stream_name = "nodeapp-log-stream"
+      group_name  = "carshub-log-group"
+      stream_name = "carshub-log-stream"
     }
 
     s3_logs {
       status   = "ENABLED"
-      location = "${aws_s3_bucket.codebuild_cache_bucket.id}/build-log"
+      location = "${aws_s3_bucket.carshub_codebuild_cache_bucket.id}/build-log"
     }
   }
 
@@ -133,6 +133,6 @@ resource "aws_codebuild_project" "nodeapp_build" {
   source_version = "master"
 
   tags = {
-    Environment = "NodeApp-Build"
+    Name = "carshub-build"
   }
 }

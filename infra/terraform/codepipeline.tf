@@ -4,12 +4,12 @@ resource "aws_codestarconnections_connection" "codepipeline_codestar_connection"
   provider_type = "GitHub"
 }
 
-resource "aws_codepipeline" "nodeapp_pipeline" {
-  name     = "nodeapp-pipeline"
-  role_arn = aws_iam_role.codepipeline_role.arn
+resource "aws_codepipeline" "carshub_pipeline" {
+  name     = "carshub-pipeline"
+  role_arn = aws_iam_role.carshub_codepipeline_role.arn
 
   artifact_store {
-    location = aws_s3_bucket.codepipeline_bucket.bucket
+    location = aws_s3_bucket.carshub_codepipeline_bucket.bucket
     type     = "S3"
   }
 
@@ -46,7 +46,7 @@ resource "aws_codepipeline" "nodeapp_pipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = aws_codebuild_project.nodeapp_build.name
+        ProjectName = aws_codebuild_project.carshub_build.name
       }
     }
   }
@@ -71,13 +71,13 @@ resource "aws_codepipeline" "nodeapp_pipeline" {
   }
 }
 
-resource "aws_s3_bucket" "codepipeline_bucket" {
-  bucket        = "theplayer007-codepipeline-bucket"
+resource "aws_s3_bucket" "carshub_codepipeline_bucket" {
+  bucket        = "theplayer007-carshub-codepipeline-bucket"
   force_destroy = true
 }
 
-resource "aws_s3_bucket_public_access_block" "codepipeline_bucket_pab" {
-  bucket = aws_s3_bucket.codepipeline_bucket.id
+resource "aws_s3_bucket_public_access_block" "carshub_codepipeline_bucket_pab" {
+  bucket = aws_s3_bucket.carshub_codepipeline_bucket.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -98,13 +98,13 @@ data "aws_iam_policy_document" "codepipeline_assume_role" {
   }
 }
 
-resource "aws_iam_role" "codepipeline_role" {
-  name               = "codepipeline-role"
+resource "aws_iam_role" "carshub_codepipeline_role" {
+  name               = "carshub_codepipeline-role"
   assume_role_policy = data.aws_iam_policy_document.codepipeline_assume_role.json
 }
 
 resource "aws_iam_role_policy_attachment" "codepipeline_ecs_full_access" {
-  role       = aws_iam_role.codepipeline_role.name
+  role       = aws_iam_role.carshub_codepipeline_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonECS_FullAccess"
 }
 
@@ -123,8 +123,8 @@ data "aws_iam_policy_document" "codepipeline_policy" {
     ]
 
     resources = [
-      aws_s3_bucket.codepipeline_bucket.arn,
-      "${aws_s3_bucket.codepipeline_bucket.arn}/*"
+      aws_s3_bucket.carshub_codepipeline_bucket.arn,
+      "${aws_s3_bucket.carshub_codepipeline_bucket.arn}/*"
     ]
   }
 
@@ -161,6 +161,6 @@ data "aws_iam_policy_document" "codepipeline_policy" {
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
   name   = "codepipeline-policy"
-  role   = aws_iam_role.codepipeline_role.id
+  role   = aws_iam_role.carshub_codepipeline_role.id
   policy = data.aws_iam_policy_document.codepipeline_policy.json
 }
