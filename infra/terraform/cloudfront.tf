@@ -1,6 +1,6 @@
 locals {
   vehicle_images_bucket_origin_id   = "carshub-vehicle-images-origin"
-  vehicle_images_bucket_domain_name = "carshub-vehicle-images.s3.${var.region}.amazonaws.com"
+  vehicle_images_bucket_domain_name = "theplayer007-vehicle-images.s3.${var.region}.amazonaws.com"
 }
 
 # Origin Access Control for Cloudfront Distribution
