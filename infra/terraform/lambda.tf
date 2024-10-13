@@ -141,5 +141,5 @@ resource "aws_signer_signing_job" "build_signing_job" {
   }
 
   ignore_signing_job_failure = true
-  depends_on                 = [aws_lambda_function.carshub-update-vehicle-image]
+  depends_on                 = [aws_lambda_function.carshub-update-vehicle-image,aws_s3_object.vehicle-images-code-object]
 }

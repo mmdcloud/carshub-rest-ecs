@@ -11,10 +11,10 @@ export class InventoryService {
   ) { }
 
   async getSignedUrl(payload): Promise<object> {
-    const s3 = new AWS.S3();
+    const s3 = new AWS.S3({signatureVersion: 'v4'});
     const myBucket = 'theplayer007-vehicle-images';
     const myKey = payload.filename;
-    const signedUrlExpireSeconds = 60 * 5;
+    const signedUrlExpireSeconds = 6000 * 5;
 
     const url = await s3.getSignedUrlPromise('putObject', {
         Bucket: myBucket,

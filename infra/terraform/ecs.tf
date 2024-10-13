@@ -5,6 +5,20 @@ resource "aws_ecs_cluster" "carshub-cluster" {
     name  = "containerInsights"
     value = "disabled"
   }
+
+}
+
+resource "aws_cloudwatch_log_group" "carshub-log-group" {
+  name = "carshub-log-group"
+
+  tags = {
+    Name = "carshub-log-group"
+  }
+}
+
+resource "aws_cloudwatch_log_stream" "carshub-log-stream" {
+  name           = "carshub-log-stream"
+  log_group_name = aws_cloudwatch_log_group.carshub-log-group.name
 }
 
 # ECR-ECS IAM Role
@@ -94,6 +108,9 @@ resource "aws_ecs_service" "carshub-service" {
   scheduling_strategy  = "REPLICA"
   desired_count        = 1
   force_new_deployment = true
+  triggers = {
+    redeployment = plantimestamp()
+  }
   network_configuration {
     security_groups  = [aws_security_group.security_group.id]
     subnets          = aws_subnet.public_subnets[*].id
