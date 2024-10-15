@@ -21,6 +21,20 @@ resource "aws_cloudwatch_log_stream" "carshub-log-stream" {
   log_group_name = aws_cloudwatch_log_group.carshub-log-group.name
 }
 
+data "aws_iam_policy_document" "s3_put_object_policy_document" {
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:PutObject"]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "s3_put_policy" {
+  name        = "s3_put_policy"
+  description = "Policy for allowing PutObject action"
+  policy      = data.aws_iam_policy_document.s3_put_object_policy_document.json
+}
+
 # ECR-ECS IAM Role
 resource "aws_iam_role" "ecs-task-execution-role" {
   name               = "ecs-task-execution-role"
@@ -44,6 +58,11 @@ resource "aws_iam_role" "ecs-task-execution-role" {
 resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-policy-attachment" {
   role       = aws_iam_role.ecs-task-execution-role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "s3-put-object-role-policy-attachment" {
+  role       = aws_iam_role.ecs-task-execution-role.name
+  policy_arn = aws_iam_policy.s3_put_policy.arn
 }
 
 # ECS Task Definition
@@ -124,5 +143,5 @@ resource "aws_ecs_service" "carshub-service" {
     container_port   = 8080
     target_group_arn = aws_lb_target_group.lb_target_group.arn
   }
-  depends_on = [null_resource.push_to_ecr]
+  depends_on = [null_resource.push_to_ecr, aws_db_instance.carshub-db]
 }
