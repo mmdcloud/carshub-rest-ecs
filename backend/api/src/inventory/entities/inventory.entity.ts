@@ -35,6 +35,15 @@ export class Inventory extends Model {
     kmsDriven: string;
 
     @Column
+    day: number;
+
+    @Column
+    month: number;
+
+    @Column
+    year: number;
+
+    @Column
     engineCapacity: string;
 
     @Column

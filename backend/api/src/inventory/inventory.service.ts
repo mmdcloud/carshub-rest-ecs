@@ -32,6 +32,11 @@ export class InventoryService {
 
   async create(createInventoryDto): Promise<Inventory> {
     const record = new Inventory(createInventoryDto);
+    let indianDate = new Date().toLocaleString("en-Us", {timeZone: 'Asia/Kolkata'});
+    record.day = new Date(indianDate).getDay();
+    record.month = (new Date(indianDate).getMonth() + 1);
+    record.year = new Date(indianDate).getFullYear();
+    record.status = "Pending";
     return await record.save();
   }
 
