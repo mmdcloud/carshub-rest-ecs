@@ -14,7 +14,7 @@ export const databaseProviders = [
             useFactory: async () => {
                 const sequelize = new Sequelize({
                     dialect: 'mysql',
-                    host: 'terraform-20241018134530067500000002.cbggkusgag7n.us-east-1.rds.amazonaws.com',
+                    host: 'terraform-20241023160143633300000002.cbggkusgag7n.us-east-1.rds.amazonaws.com',
                     port: 3306,
                     username: 'admin',
                     password: 'Mohitdixit12345!',

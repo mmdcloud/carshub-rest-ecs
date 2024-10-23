@@ -10,9 +10,10 @@ import { VehicleOwnersModule } from './vehicle-owners/vehicle-owners.module';
 import { ExtraServicesModule } from './extra-services/extra-services.module';
 import { BuyersModule } from './buyers/buyers.module';
 import { databaseProviders } from './database.providers';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
-  imports: [VehicleModelsModule, BrandsModule, InventoryModule, OrdersModule, UsersModule, VehicleOwnersModule, ExtraServicesModule, BuyersModule],
+  imports: [VehicleModelsModule, BrandsModule, InventoryModule, OrdersModule, UsersModule, VehicleOwnersModule, ExtraServicesModule, BuyersModule, DashboardModule, ],
   controllers: [AppController],
   providers: [AppService, ...databaseProviders],
 })

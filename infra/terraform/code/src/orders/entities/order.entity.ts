@@ -18,6 +18,15 @@ export class Order extends Model {
     discount: string;
 
     @Column
+    day: number;
+
+    @Column
+    month: number;
+
+    @Column
+    year: number;
+
+    @Column
     totalAmount: string;
 
     @ForeignKey(() => Inventory)
