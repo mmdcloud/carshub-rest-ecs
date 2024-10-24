@@ -7,6 +7,17 @@ resource "aws_s3_bucket" "vehicle-images" {
   }
 }
 
+resource "aws_s3_bucket_cors_configuration" "carshub-vehicle-images-cors" {
+  bucket = aws_s3_bucket.vehicle-images.id
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["PUT", "POST","GET"]
+    allowed_origins = ["*"]
+    max_age_seconds = 3000
+  }
+}
+
 resource "aws_s3_bucket" "vehicle-images-code" {
   bucket        = "theplayer007-vehicle-images-code"
   force_destroy = true
