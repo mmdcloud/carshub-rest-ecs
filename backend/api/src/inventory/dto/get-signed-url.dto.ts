@@ -1,3 +1,3 @@
 export class GetSignedUrlDto {
-    filename:string;
+    files:[string];
 }
