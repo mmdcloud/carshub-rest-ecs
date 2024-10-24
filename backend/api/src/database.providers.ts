@@ -25,7 +25,7 @@ export const databaseProviders = [
                 Order, Inventory
             ]);
             await sequelize.sync({
-                force: true
+                force: false
             });
             return sequelize;
         },
